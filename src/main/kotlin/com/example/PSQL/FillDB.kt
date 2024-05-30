@@ -2,7 +2,7 @@ package com.example.PSQL
 
 import kotlin.random.Random
 
-class FillDB {
+object FillDB {
     val names = listOf(
         "Боб",
         "Сэм",
@@ -68,7 +68,8 @@ class FillDB {
         for (i in 0 until 10000) {
             val userId = UserDAO.getAllUsers()[random.nextInt(names.size)].id
             val homeId = HomeDAO.createHome(userId)
-            val numRooms = random.nextInt(5) + 2
+            OwnedHomesDAO.addOwnerToHome(userId, homeId)
+            val numRooms = random.nextInt(0, 4) + 2
             for (roomNumber: Int in 0 until numRooms) {
                 var connectedRooms: List<Int>? = null
                 if (roomNumber != 1) {
@@ -92,6 +93,7 @@ class FillDB {
         val userId = UserDAO.createUser("Алексей Коротков")
         for (i in 0 until 2){
             val homeId = HomeDAO.createHome(userId)
+            OwnedHomesDAO.addOwnerToHome(userId, homeId)
             val numRooms = 6
             for (roomNumber: Int in 0 until numRooms) {
                 var connectedRooms: List<Int>? = null
