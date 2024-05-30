@@ -1,4 +1,6 @@
-package com.exampleimport redis.clients.jedis.Jedis
+package com.exampleimport
+
+import redis.clients.jedis.Jedis
 
 object RedisClient {
     private val jedis = Jedis("93.95.97.113", 5432)

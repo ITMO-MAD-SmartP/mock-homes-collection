@@ -1,5 +1,5 @@
 package com.example
-import PSQL.*
+import com.example.PSQL.*
 import kotlin.random.Random
 
 val requests = listOf(

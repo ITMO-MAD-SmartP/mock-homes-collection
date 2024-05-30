@@ -51,7 +51,7 @@ class FillDB {
                             sensors[random.nextInt(sensors.size)],
                             random.nextBoolean(),
                             random.nextDouble()
-                        ),
+                        ), roomId
                     )
                 }
                 HomeDAO.addRoomToHome(homeId, roomId)
