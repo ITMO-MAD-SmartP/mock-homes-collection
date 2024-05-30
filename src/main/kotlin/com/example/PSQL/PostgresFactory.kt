@@ -7,12 +7,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object PostgresFactory {
     fun init() {
         Database.connect(
-            url = "jdbc:postgresql://93.95.97.113:5432/blps",
+            url = "jdbc:postgresql://localhost:5432/rmp",
             driver = "org.postgresql.Driver",
-            user = "bob",
-            password = "12345"
+            user = "postgres"
         )
         transaction {
+            SchemaUtils.drop(Users, Homes, Rooms, Sensors, Switches, ConnectedRooms, SensorsInRoom, OwnedHomes)
             SchemaUtils.create(Users, Homes, Rooms, Sensors, Switches, ConnectedRooms, SensorsInRoom, OwnedHomes)
         }
     }

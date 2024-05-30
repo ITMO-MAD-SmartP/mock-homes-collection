@@ -2,6 +2,7 @@ package com.example.PSQL
 
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.transactions.transaction
 
 data class User(val id: Int, val name: String)
 
@@ -22,6 +23,10 @@ object UserDAO {
         Users.selectAll().map { User(it[Users.id], it[Users.name]) }
     }
 
+    fun getHomesForUser(userId: Int): List<Home> = PostgresFactory.dbQuery {
+        Homes.select { Homes.ownerId eq userId }
+            .map { Home(it[Homes.id], it[Homes.ownerId]) }
+    }
     fun updateUser(id: Int, name: String, age: Int) = PostgresFactory.dbQuery {
         Users.update({ Users.id eq id }) {
             it[Users.name] = name

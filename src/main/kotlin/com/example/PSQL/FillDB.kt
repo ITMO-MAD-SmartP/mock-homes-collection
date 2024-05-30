@@ -17,39 +17,70 @@ class FillDB {
         "Райан",
         "Брайан",
         "Николай",
-        "Анатолий"
+        "Анатолий",
+        "Виталий",
+        "Евгения",
+        "Евгений",
+        "Иосиф",
+        "Борис",
+        "Кристофор",
+        "Кристина",
+        "Александра",
+        "Анжелика"
     )
 
-    val sensors = listOf(
-        "Датчик температуры",
-        "Датчик света",
-        "Датчик уровня воды",
-        "Выключатель света",
-        "Дверной замок",
-        "Кондиционер",
-        "Телевизор",
-        "Холодильник"
+    val secondNames = listOf(
+        "Алентьев",
+        "Брайан",
+        "Симсон",
+        "Кудлай",
+        "Платонов",
+        "Павлов",
+        "Девяткин",
+        "Восьмеркин",
+        "Семеркин",
+        "Иванов",
+        "Васильев",
+        "Лобанов",
+        "Быков",
+        "Королев",
+        "Авксентьев",
+        "Романов",
+        "Клименков",
+        "Борисов",
+        "Юсупов",
+        "Андреев",
+        "Щербаков",
+        "Шептунов",
+        "Шевченко",
+        "Путин"
     )
+
+    val sensors = listOf("l", "w", "t")
 
     fun initDB() {
+        for (i in 0 until names.size){
+            for (j in 0 until secondNames.size) {
+                UserDAO.createUser(names[i] + " " + secondNames[j])
+            }
+        }
         val random = Random(System.currentTimeMillis())
         for (i in 0 until 10000) {
-            val userId = UserDAO.createUser(names[random.nextInt(names.size)])
+            val userId = UserDAO.getAllUsers()[random.nextInt(names.size)].id
             val homeId = HomeDAO.createHome(userId)
-            val numRooms = random.nextInt(2, 12)
-            for (roomNumber in 0 until numRooms) {
+            val numRooms = random.nextInt(5) + 2
+            for (roomNumber: Int in 0 until numRooms) {
                 var connectedRooms: List<Int>? = null
                 if (roomNumber != 1) {
                     val numConnectedRooms = Random.nextInt(1, roomNumber + 1)
                     connectedRooms = HomeDAO.getRoomsInHome(homeId).shuffled().take(numConnectedRooms).map{it.id}
                 }
                 val roomId = RoomDAO.createRoom(homeId, connectedRooms)
-                val numSensors = Random.nextInt(0, 5)
-                for (sensorId in 0 until numSensors) {
+                for (sensorId: Int in 0 until 3) {
                     SensorDAO.addSensorToRoom(
                         SensorDAO.createSensor(
-                            sensors[random.nextInt(sensors.size)],
-                            random.nextBoolean(),
+                            sensors[sensorId],
+                            if (sensorId == 2) random.nextDouble(-20.0, 40.0) else random.nextDouble(0.0, 100.0),
                             random.nextDouble()
                         ), roomId
                     )
@@ -57,5 +88,30 @@ class FillDB {
                 HomeDAO.addRoomToHome(homeId, roomId)
             }
         }
+
+        val userId = UserDAO.createUser("Алексей Коротков")
+        for (i in 0 until 2){
+            val homeId = HomeDAO.createHome(userId)
+            val numRooms = 6
+            for (roomNumber: Int in 0 until numRooms) {
+                var connectedRooms: List<Int>? = null
+                if (roomNumber != 1) {
+                    val numConnectedRooms = Random.nextInt(1, roomNumber + 1)
+                    connectedRooms = HomeDAO.getRoomsInHome(homeId).shuffled().take(numConnectedRooms).map { it.id }
+                }
+                val roomId = RoomDAO.createRoom(homeId, connectedRooms)
+                for (sensorId: Int in 0 until 3) {
+                    SensorDAO.addSensorToRoom(
+                        SensorDAO.createSensor(
+                            sensors[sensorId],
+                            if (sensorId == 2) random.nextBoolean(-20, 40) else random.nextBoolean(0, 100),
+                            random.nextDouble()
+                        ), roomId
+                    )
+                }
+                HomeDAO.addRoomToHome(homeId, roomId)
+            }
+        }
+
     }
 }
