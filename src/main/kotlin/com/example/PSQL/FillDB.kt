@@ -73,7 +73,7 @@ object FillDB {
             for (roomNumber: Int in 0 until numRooms) {
                 var connectedRooms: List<Int>? = null
                 if (roomNumber != 1) {
-                    val numConnectedRooms = Random.nextInt(1, roomNumber + 1)
+                    val numConnectedRooms = Random.nextInt(1, roomNumber + 2)
                     connectedRooms = HomeDAO.getRoomsInHome(homeId).shuffled().take(numConnectedRooms).map{it.id}
                 }
                 val roomId = RoomDAO.createRoom(homeId, connectedRooms)
