@@ -1,7 +1,6 @@
 package com.example
 import com.example.PSQL.*
 import com.exampleimport.RedisClient
-import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary.stringToInt
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.datetime.Clock
@@ -25,12 +24,6 @@ data class SensorRequest(
     @SerialName("GADGET_TYPE") val name: String,
     @SerialName("ACTION") val action: String,
     @SerialName("VALUE") val value: Double,
-)
-
-@Serializable
-data class HomeRequest(
-    val userId: Int,
-    val newHomeId: Int
 )
 
 val requests = listOf(
@@ -61,9 +54,17 @@ fun changeInfo(sensor: Sensor){
     }
 }
 
+fun generateTemp(sensor: Sensor){
+    for (i in 0 until 500){
+        changeInfo(sensor)
+        sendInfo(sensor)
+    }
+}
+
 fun main() {
     PostgresFactory.init()
     FillDB.initDB()
+    generateTemp(SensorDAO.getSensor(1)!!)
 
     val random = Random(System.currentTimeMillis())
 
@@ -92,48 +93,6 @@ fun main() {
             }
             requestJson = RedisClient.popFromQueue("changeGadgetState")
         }
-
-        requestJson = RedisClient.popFromQueue("changeHomeOwnership")
-        while( requestJson != null){
-            val homeRequest = Json.decodeFromString<HomeRequest>(requestJson)
-
-            requestJson = RedisClient.popFromQueue("changeHomeOwnership")
-        }
-        /*for (home in HomeDAO.getAllHomes()) {
-          // Отправляем по одному запросу в секунду в течение 1 минуты
-            val request = requests[random.nextInt(requests.size)]
-            var result = ""
-            when (request) {
-                "Включить/Выключить датчик" -> {
-                    val sensors = HomeDAO.getSensorsInHome(home.id)
-                    val sensor = sensors[random.nextInt(sensors.size)]
-                    val sensorState: Boolean = random.nextBoolean()
-                    SensorDAO.updateSensor(sensor.id, sensorState, sensor.value)
-                    result = "Состояние датчика ${sensor.id}: ${if (sensorState) "Включен" else "Выключен"}"
-                }
-                "Узнать состояние датчика" -> {
-                    val sensors = HomeDAO.getSensorsInHome(home.id)
-                    val sensor = sensors[random.nextInt(sensors.size)]
-                    result = "Состояние датчика ${sensor.id}: ${if (sensor.state) "Включен" else "Выключен"}"
-                }
-                "Узнать значение датчика" -> {
-                    val sensors = HomeDAO.getSensorsInHome(home.id)
-                    val sensor = sensors[random.nextInt(sensors.size)]
-                    result = "Значение датчика ${sensor.id}: ${if (sensor.state) "Включен" else "Выключен"}"
-                }
-                "Получить массив комнат в доме" -> {
-                    result = "Комнаты в доме ${home.id}: ${HomeDAO.getRoomsInHome(home.id)}"
-                }
-                "Получить массив датчиков в доме" -> {
-                    result = "Датчики в доме ${home.id}: ${HomeDAO.getSensorsInHome(home.id)}"
-                }
-                "Получить информацию о датчике" -> {
-                    val sensor = HomeDAO.getSensorsInHome(home.id).random()
-                    result = "Датчик ${sensor.name} №${sensor.id} ${if (sensor.state) "Включен" else "Выключен"}, значение ${sensor.state}"
-                }
-            }
-            // print(result)
-        }*/
         Thread.sleep(1000)
     }
 }

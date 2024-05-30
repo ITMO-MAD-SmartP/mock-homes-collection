@@ -25,7 +25,7 @@ object UserDAO {
 
     fun getUserByName(name: String): List<User> = PostgresFactory.dbQuery {
         Users.select { Users.name eq name }
-            .map { User(it[Users.id].value, it[Users.name]) }
+            .map { User(it[Users.id], it[Users.name]) }
     }
 
     fun getHomesForUser(userId: Int): List<Home> = PostgresFactory.dbQuery {

@@ -56,7 +56,7 @@ object FillDB {
         "Путин"
     )
 
-    val sensors = listOf("l", "w", "t")
+    val sensors = listOf("t", "w", "l")
 
     fun initDB() {
         for (i in 0 until names.size){
@@ -81,8 +81,8 @@ object FillDB {
                     SensorDAO.addSensorToRoom(
                         SensorDAO.createSensor(
                             sensors[sensorId],
-                            if (sensorId == 2) random.nextDouble(-20.0, 40.0) else random.nextDouble(0.0, 100.0),
-                            random.nextDouble()
+                            random.nextBoolean(),
+                            if (sensorId == 2) random.nextDouble(-20.0, 40.0) else random.nextDouble(0.0, 100.0)
                         ), roomId
                     )
                 }
@@ -106,8 +106,8 @@ object FillDB {
                     SensorDAO.addSensorToRoom(
                         SensorDAO.createSensor(
                             sensors[sensorId],
-                            if (sensorId == 2) random.nextBoolean(-20, 40) else random.nextBoolean(0, 100),
-                            random.nextDouble()
+                            random.nextBoolean(),
+                            if (sensorId == 2) random.nextDouble(-20.0, 40.0) else random.nextDouble(0.0, 100.0)
                         ), roomId
                     )
                 }
