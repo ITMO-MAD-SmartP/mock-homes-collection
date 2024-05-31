@@ -12,8 +12,8 @@ object PostgresFactory {
             user = "postgres"
         )
         transaction {
-            SchemaUtils.drop(Users, Homes, Rooms, Sensors, Switches, ConnectedRooms, SensorsInRoom, OwnedHomes)
-            SchemaUtils.create(Users, Homes, Rooms, Sensors, Switches, ConnectedRooms, SensorsInRoom, OwnedHomes)
+//            SchemaUtils.drop(Users, Homes, Rooms, Sensors, Switches, ConnectedRooms, SensorsInRoom, OwnedHomes)
+//            SchemaUtils.create(Users, Homes, Rooms, Sensors, Switches, ConnectedRooms, SensorsInRoom, OwnedHomes)
         }
     }
 

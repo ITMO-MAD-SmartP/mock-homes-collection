@@ -66,8 +66,8 @@ fun generateTemp(sensor: Sensor){
 
 fun main() {
     PostgresFactory.init()
-    FillDB.initDB()
-    generateTemp(SensorDAO.getSensor(1)!!)
+//    FillDB.initDB()
+//    generateTemp(SensorDAO.getSensor(1)!!)
 
     val random = Random(System.currentTimeMillis())
 
