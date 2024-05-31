@@ -65,7 +65,7 @@ object FillDB {
             }
         }
         val random = Random(System.currentTimeMillis())
-        for (i in 0 until 10000) {
+        for (i in 0 until 10) {
             val userId = UserDAO.getAllUsers()[random.nextInt(names.size)].id
             val homeId = HomeDAO.createHome(userId)
             OwnedHomesDAO.addOwnerToHome(userId, homeId)
@@ -86,7 +86,6 @@ object FillDB {
                         ), roomId
                     )
                 }
-                HomeDAO.addRoomToHome(homeId, roomId)
             }
         }
 
@@ -98,7 +97,7 @@ object FillDB {
             for (roomNumber: Int in 0 until numRooms) {
                 var connectedRooms: List<Int>? = null
                 if (roomNumber != 1) {
-                    val numConnectedRooms = Random.nextInt(1, roomNumber + 1)
+                    val numConnectedRooms = Random.nextInt(1, roomNumber + 2)
                     connectedRooms = HomeDAO.getRoomsInHome(homeId).shuffled().take(numConnectedRooms).map { it.id }
                 }
                 val roomId = RoomDAO.createRoom(homeId, connectedRooms)
@@ -111,9 +110,7 @@ object FillDB {
                         ), roomId
                     )
                 }
-                HomeDAO.addRoomToHome(homeId, roomId)
             }
         }
-
     }
 }

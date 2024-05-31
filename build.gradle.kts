@@ -43,4 +43,5 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.6")
     implementation("org.postgresql:postgresql:42.2.23")
     implementation("redis.clients:jedis:4.0.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
 }

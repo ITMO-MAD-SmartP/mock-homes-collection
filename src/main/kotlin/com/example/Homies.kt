@@ -1,6 +1,7 @@
 package com.example
 import com.example.PSQL.*
 import com.exampleimport.RedisClient
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.datetime.Clock
@@ -35,11 +36,13 @@ val requests = listOf(
     "Получить массив датчиков в доме",
 )
 
+val objectMapper = jacksonObjectMapper();
+
 fun sendInfo(sensor: Sensor){
     val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     val formattedTime = currentTime.toJavaLocalDateTime().format(formatter)
-    RedisClient.pushToQueue("queue:tlog", Json.encodeToString(Info(sensor.id, sensor.name, sensor.value, formattedTime)))
+    RedisClient.pushToQueue("queue:tlog", objectMapper.writeValueAsString(Info(sensor.id, sensor.name, sensor.value, formattedTime)))
 }
 
 fun changeInfo(sensor: Sensor){
